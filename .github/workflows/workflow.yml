@@ -1,0 +1,21 @@
+name: LighthouseCI
+on: [push]
+
+jobs:
+  lighthouseci:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install npm modules
+        working-directory: ./test-app
+        run: npm install && npm install -g @lhci/cli@0.8.x
+      - name: Run build
+        working-directory: ./test-app
+        run: npm run build
+      - name: Run lighthouseCI
+        working-directory: ./test-app
+        run: lhci autorun
